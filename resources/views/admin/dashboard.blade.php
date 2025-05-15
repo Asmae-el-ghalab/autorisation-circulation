@@ -1,83 +1,12 @@
-@extends('admin.layout')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h1>Bienvenue dans le Dashboard Admin</h1>
 
-@section('title', 'Dashboard')
-
-@push('styles')
-    
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-@endpush
-
-@section('content')
-    <div class="content">
-        <div class="title-info">
-            <p>Tableau de bord</p>
-            <i class="fas fa-chart-bar" style="font-size:20px"></i>
-        </div>
-
-        <div class="data-info"> 
-
-            <div class="box">
-                <i class="fas fa-user"></i>
-                <div class="data">
-                    <p>Utilisateurs</p>
-                    <span>{{$userCount}}</span>
-                </div>
-            </div>
-
-            <div class="box">
-            <i class="fa-solid fa-bottle-droplet"></i>
-                <div class="data">
-                    <p>Produit</p>
-                    <span>{{$productCount}}</span>
-                </div>
-            </div>
-
-            <div class="box">
-            <i class="fa-solid fa-spa"></i>
-                <div class="data">
-                    <p>Service</p>
-                    <span>{{$serviceCount}}</span>
-                </div>
-            </div>
-
-            <div class="box">
-            <i class="fa-solid fa-dollar-sign"></i>
-                <div class="data">
-                    <p>Revenus</p>
-                    <span>10000</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="title-info">
-            <p> Produits</p>
-            <i class="fa-solid fa-box-open" style="font-size:20px"></i>
-        </div>
-
-        <table>
-
-            <thead>
-                <tr>
-                    <th>Produit</th>
-                    <th>Description</th>
-                    <th>Prix</th>
-                    <th>Quantité</th>
-                    <th>Categorie</th>
-                </tr>
-            </thead>
-        @if(count($products)>0)
-            <tbody>
-                @foreach($products as $product)
-                    <tr>
-                        <td><span class="title-product">{{$product['name']}}</span></td>
-                        <td>{{$product['description']}}</td>
-                        <td><span class="price">${{$product['price']}}</span></td>
-                        <td><span class="count">{{$product['quantity']}}</span></td> 
-                        <td>{{$product['category']}}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        @endif
-        </table>
-    </div>  
-@endsection
+</body>
+</html>

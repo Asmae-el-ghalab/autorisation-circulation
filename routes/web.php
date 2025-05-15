@@ -23,7 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+ Route::get('/lwhatthakom', function(){
+        return view("clients.lwhatthakom");
+    })->name('lwhatthakom');
 //Souhail est ajouté cette partie🐱‍👤
 Route::middleware(['auth','admin'])->group(function (){
 
@@ -42,7 +44,16 @@ Route::middleware(['auth','admin'])->group(function (){
     Route::post('/admin/users', [UsersController::class, 'store'])->name('admin.users.store');
 
 });
+Route::get('/dashboard/demande',function(){
+    return view("clients.demande");
+})->name('demande');
 
+    Route::get('/dashboard/license',function(){
+        return view("clients.license");
+    })->name('license');
+    Route::get('/dashboard/suivi',function(){
+        return view("clients.suivi");
+    })->name('suivi');
 require __DIR__.'/auth.php';
 
 //khaliw had les liens hna merci👀

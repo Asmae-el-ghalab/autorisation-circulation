@@ -3,80 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
-    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
-
-    <title>@yield("title")</title>
-    @stack('styles')
-
+    <title>Document</title>
 </head>
 <body>
-    <div class="menu">
-        <ul>
-            <li class="profile" onclick="window.location='{{ route('profile.edit') }}'" style="cursor:pointer;">
-                <div class="img-box">
-                    <img src="{{ asset('assets/profile.webp') }}" alt="profile">
-                </div>
-                <h2>{{ Auth::user()->first_name }}</h2>
-            </li>
+<h1>Bienvenue dans le Dashboard Admin</h1>
 
-            <li>
-                <a class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-                    <i class="fas fa-home"></i>
-                    <p>Dashboard</p>
-                </a>
-            </li>
-
-            <li>
-            <a class="{{ request()->routeIs('admin.users') ? 'active' : '' }}" href="{{ route('admin.users') }}">
-                    <i class="fas fa-user-group"></i>
-                    <p>Utilisateurs</p>
-                </a>
-            </li>
-
-            <li>
-                <a class="{{ Request::is('admin.products*') ? 'active' : '' }}" href="{{ route('admin.products') }}">
-                    <i class="fa-solid fa-box-open"></i>
-                    <p>Produits</p>
-                </a>
-            </li>
-
-            <li>
-            <a class="{{ Request::is('admin.income*') ? 'active' : '' }}" href="{{ route('admin.income') }}">
-            <i class="fa-solid fa-money-check-dollar"></i>
-                    <p>Revenus</p>
-                </a>
-            </li>
-
-            <li>
-            <a class="{{ Request::is('admin.settings*') ? 'active' : '' }}" href="{{ route('admin.settings') }}">
-                    <i class="fas fa-cog"></i>
-                    <p>Paramètres</p>
-                </a>
-            </li>
-
-            <li class="log-out">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="logout-button">
-                        <i class="fas fa-sign-out"></i>
-                        <p>Déconnexion</p>
-                    </button>
-                </form>
-            </li>
-
-
-
-            <!-- Autres éléments du menu -->
-        </ul>
-    </div>   
-
-     <!-- Contenu dynamique -->
-    <div class="main-content">
-        @yield('content')
-    </div>
-
-   
 </body>
 </html>

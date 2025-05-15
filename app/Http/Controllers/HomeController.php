@@ -12,16 +12,7 @@ use App\Models\Service;
 class HomeController extends Controller
 {
     public function index(){
-        $serviceCount=service::count();
-        $products = product::all(); // Récupérer tous les produits
-        $productCount = Product::count(); // compter tous les produits
-        
-        // Compter clients et employés
-        $clientCount = User::where('usertype', 'client')->count();
-        $employeeCount = User::where('usertype', 'employee')->count();
-        $userCount = $clientCount + $employeeCount;
-
-
-        return view('admin.dashboard',compact('products','productCount','userCount','serviceCount'));
+       
+        return view('admin.dashboard');
     }
 }

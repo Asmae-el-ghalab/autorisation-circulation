@@ -29,6 +29,15 @@ class UsersTableSeeder extends Seeder
                 'password'   => Hash::make('password123')
             ]);
         }
+
+         User::create([
+                'first_name' => 'admin',
+                'last_name'  => 'admin',
+                'email'      =>'admin@gmail.com',
+                'phone'      => '0602608063',
+                'usertype'   => 'admin',
+                'password'   => Hash::make('password123')
+            ]);
     }
     
 }
