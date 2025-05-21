@@ -40,14 +40,18 @@
                 <!-- Liens de navigation - Bureau -->
                 <div class="hidden sm:flex sm:mr-10">
                     <div class="flex space-x-1 space-x-reverse">
-                        <div class="relative group">
-                            <a href="{{route('lwhatthakom')}}" class="px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-blue-700 transition duration-300 flex items-center">
-                                <span class="hidden md:inline">لوحة التحكم</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:hidden" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                                </svg>
-                            </a>
-                        </div>
+                        @auth
+                            @if(auth()->user()->usertype === 'admin')
+                            <div class="relative group">
+                                <a href="{{route('lwhatthakom')}}" class="px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-blue-700 transition duration-300 flex items-center">
+                                    <span class="hidden md:inline">لوحة التحكم</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:hidden" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                                    </svg>
+                                </a>
+                            </div>
+                            @endif
+                        @endauth
                         
                         <div class="relative group">
                             <a href="{{ route('demande') }}" class="px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-blue-700 transition duration-300 flex items-center">
@@ -74,6 +78,7 @@
             </div>
 
             <!-- Côté droit - Menu utilisateur ou liens de connexion -->
+             @auth
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <div class="relative group">
                     <button class="flex items-center space-x-1 text-sm font-medium text-white hover:text-blue-200 transition-colors duration-200">
@@ -95,7 +100,8 @@
                             </svg>
                             الملف الشخصي
                         </a>
-                        <form method="POST" action="/logout">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
                             <button type="submit" class="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
@@ -106,6 +112,12 @@
                     </div>
                 </div>
             </div>
+            @else 
+            <div>
+                <a href="{{ route('login') }}">login</a>
+                <a href="{{ route('register') }}">register</a>
+            </div>
+            @endauth
 
             <!-- Bouton du menu mobile -->
             <div class="-ml-2 flex items-center sm:hidden">
@@ -122,12 +134,16 @@
     <!-- Menu de navigation responsive -->
     <div id="mobile-menu" class="hidden sm:hidden bg-blue-700">
         <div class="pt-2 pb-3 space-y-1">
-            <a href="/lwhatthakom" class="flex items-center text-white hover:bg-blue-600 px-4 py-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                </svg>
-                لوحة التحكم
-            </a>
+            @auth
+                @if(auth()->user()->usertype === 'admin')
+                <a href="/lwhatthakom" class="flex items-center text-white hover:bg-blue-600 px-4 py-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    لوحة التحكم
+                </a>
+                @endif
+            @endauth
             
             <a href="/demande" class="flex items-center text-white hover:bg-blue-600 px-4 py-3">
                 <span class="ml-2">📝</span>
@@ -158,7 +174,8 @@
                     الملف الشخصي
                 </a>
 
-                <form method="POST" action="/logout">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
                     <button type="submit" class="w-full text-left flex items-center text-white hover:bg-blue-600 px-4 py-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />

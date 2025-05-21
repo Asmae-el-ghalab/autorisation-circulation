@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class service extends Model
+class Service extends Model
 {
     protected $fillable = [
         'name',
@@ -13,5 +13,4 @@ class service extends Model
         'duration',
         'category',
     ];
-
 }
