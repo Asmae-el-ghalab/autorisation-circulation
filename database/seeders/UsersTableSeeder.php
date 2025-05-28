@@ -26,7 +26,8 @@ class UsersTableSeeder extends Seeder
                 'email'      => $faker->unique()->safeEmail,
                 'phone'      => $faker->phoneNumber,
                 'usertype'   => 'client',
-                'password'   => Hash::make('password123')
+                'password'   => Hash::make('password123'),
+                'gender'     => $faker->randomElement(['male', 'female'])
             ]);
         }
 
@@ -36,7 +37,8 @@ class UsersTableSeeder extends Seeder
                 'email'      =>'admin@gmail.com',
                 'phone'      => '0602608063',
                 'usertype'   => 'admin',
-                'password'   => Hash::make('password123')
+                'password'   => Hash::make('password123'),
+                'gender'     => 'male'
             ]);
     }
     

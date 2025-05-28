@@ -361,6 +361,27 @@
 <body>
     @include('layouts.navigation')
     <div class="container">
+        @guest
+            <div class="track-container">
+                <div class="text-center py-12">
+                    <div class="text-6xl text-blue-600 mb-4">
+                        <i class="fas fa-user-lock"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">يجب تسجيل الدخول أولاً</h2>
+                    <p class="text-gray-600 mb-6">لتتبع طلبك، يرجى تسجيل الدخول أو إنشاء حساب جديد</p>
+                    <div class="flex justify-center gap-4">
+                        <a href="{{ route('login') }}" class="btn-search">
+                            <i class="fas fa-sign-in-alt"></i>
+                            تسجيل الدخول
+                        </a>
+                        <a href="{{ route('register') }}" class="bg-white text-blue-600 px-6 py-3 rounded-xl inline-flex items-center gap-2 border-2 border-blue-100 hover:bg-blue-50 transition-colors duration-200">
+                            <i class="fas fa-user-plus"></i>
+                            إنشاء حساب
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @else
         <!-- Main Tracking Container -->
         <div class="track-container">
             <!-- Header Section -->
@@ -369,9 +390,26 @@
                 <p>تابع حالة طلبك في الوقت الفعلي</p>
             </div>
 
+            @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline">{{ session('error') }}</span>
+            </div>
+            @endif
+
             <!-- Search Form -->
+            @if(!isset($demande))
             <div class="track-form">
-                <form method="GET" action="#">
+                <div class="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-2">أين أجد رقم الطلب؟</h3>
+                    <ul class="list-disc list-inside text-blue-700 space-y-2">
+                        <li>رقم الطلب هو الرقم الذي تم إعطاؤه لك عند تقديم الطلب</li>
+                        <li>يمكنك العثور عليه في رسالة التأكيد التي ظهرت بعد تقديم طلبك</li>
+                        <li>إذا فقدت رقم طلبك، يرجى التواصل مع خدمة العملاء</li>
+                    </ul>
+                </div>
+                
+                <form method="POST" action="{{ route('demandes.track') }}">
+                    @csrf
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-fingerprint"></i> رقم الطلب
@@ -379,8 +417,9 @@
                         <input type="text" 
                                name="numero_demande" 
                                class="form-control" 
-                               placeholder="أدخل الرقم المرجعي للطلب" 
+                               placeholder="أدخل الرقم المرجعي للطلب (مثال: 12345)" 
                                required>
+                        <p class="text-sm text-gray-500 mt-2">رقم الطلب هو رقم رقمي فقط، مثال: 12345</p>
                     </div>
                     
                     <div class="text-center">
@@ -390,30 +429,42 @@
                     </div>
                 </form>
             </div>
+            @endif
 
             <!-- Status Card -->
+            @if(isset($demande))
             <div class="status-card">
                 <!-- Status Header -->
                 <h5 class="status-title">
-                    <i class="fas fa-clipboard-list"></i> حالة الطلب #DV-2025-0582
-                    <span class="status-badge">قيد المعالجة</span>
+                    <i class="fas fa-clipboard-list"></i> حالة الطلب #{{ $demande->id }}
+                    <span class="status-badge" style="background: {{ $demande->status === 'accepte' ? '#10B981' : ($demande->status === 'refuse' ? '#EF4444' : '#F59E0B') }}">
+                        @if($demande->status === 'en_attente')
+                            قيد المعالجة
+                        @elseif($demande->status === 'accepte')
+                            مقبول
+                        @else
+                            مرفوض
+                        @endif
+                    </span>
                 </h5>
                 
                 <!-- Status Details -->
                 <div class="status-detail">
                     <i class="fas fa-calendar-check"></i>
-                    <span>تاريخ الإرسال: <strong>2025-05-15</strong></span>
+                    <span>تاريخ الإرسال: <strong>{{ $demande->created_at->format('Y-m-d') }}</strong></span>
                 </div>
                 
                 <div class="status-detail">
                     <i class="fas fa-clock"></i>
-                    <span>تاريخ التحديث الأخير: <strong>2025-05-18</strong></span>
+                    <span>تاريخ التحديث الأخير: <strong>{{ $demande->updated_at->format('Y-m-d') }}</strong></span>
                 </div>
-                
+
+                @if($demande->notes_admin)
                 <div class="status-detail">
-                    <i class="fas fa-info-circle"></i>
-                    <span>المرحلة الحالية: <strong>مراجعة الوثائق</strong></span>
+                    <i class="fas fa-comment-alt"></i>
+                    <span>ملاحظات الإدارة: <strong>{{ $demande->notes_admin }}</strong></span>
                 </div>
+                @endif
 
                 <!-- Progress Bar -->
                 <div class="progress-container">
@@ -425,35 +476,59 @@
                         </div>
                         
                         <!-- Step 2 -->
-                        <div class="step completed">
-                            <i class="fas fa-check"></i>
-                            <span class="step-label">مراجعة أولية</span>
+                        <div class="step {{ $demande->status !== 'en_attente' ? 'completed' : 'active' }}">
+                            @if($demande->status !== 'en_attente')
+                                <i class="fas fa-check"></i>
+                            @else
+                                2
+                            @endif
+                            <span class="step-label">قيد المراجعة</span>
                         </div>
                         
                         <!-- Step 3 -->
-                        <div class="step active">
-                            3
-                            <span class="step-label">مراجعة الوثائق</span>
-                        </div>
-                        
-                        <!-- Step 4 -->
-                        <div class="step">
-                            4
-                            <span class="step-label">الموافقة النهائية</span>
-                        </div>
-                        
-                        <!-- Step 5 -->
-                        <div class="step">
-                            5
-                            <span class="step-label">مكتمل</span>
+                        <div class="step {{ $demande->status === 'accepte' ? 'completed' : ($demande->status === 'refuse' ? 'active' : '') }}">
+                            @if($demande->status === 'accepte')
+                                <i class="fas fa-check"></i>
+                            @else
+                                3
+                            @endif
+                            <span class="step-label">القرار النهائي</span>
                         </div>
                         
                         <!-- Progress Bar Indicator -->
-                        <div class="progress-bar"></div>
+                        <div class="progress-bar" style="width: {{ $demande->status === 'en_attente' ? '33%' : ($demande->status === 'accepte' ? '100%' : '66%') }}"></div>
+                    </div>
+                </div>
+
+                <!-- Request Details -->
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Vehicle Information -->
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h4 class="text-lg font-semibold mb-4">معلومات السيارة</h4>
+                        <div class="space-y-2">
+                            <p><span class="font-medium">النوع:</span> {{ $vehicule_info['type'] }}</p>
+                            <p><span class="font-medium">رقم التسجيل:</span> {{ $vehicule_info['immatriculation'] }}</p>
+                            <p><span class="font-medium">السعة:</span> {{ $vehicule_info['capacite'] }}</p>
+                            <p><span class="font-medium">سنة الصنع:</span> {{ $vehicule_info['annee'] }}</p>
+                            <p><span class="font-medium">اللون:</span> {{ $vehicule_info['couleur'] }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Route Information -->
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h4 class="text-lg font-semibold mb-4">معلومات المسار</h4>
+                        <div class="space-y-2">
+                            <p><span class="font-medium">نقطة الانطلاق:</span> {{ $trajet_info['depart'] }}</p>
+                            <p><span class="font-medium">نقطة الوصول:</span> {{ $trajet_info['arrivee'] }}</p>
+                            <p><span class="font-medium">أيام العمل:</span> {{ $trajet_info['jours_travail'] }}</p>
+                            <p><span class="font-medium">المسافة:</span> {{ $trajet_info['distance'] }} كم</p>
+                        </div>
                     </div>
                 </div>
             </div>
+            @endif
         </div>
+        @endguest
     </div>
 </body>
 </html>
