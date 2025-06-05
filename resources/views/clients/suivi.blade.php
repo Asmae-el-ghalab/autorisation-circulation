@@ -439,7 +439,7 @@
                     <i class="fas fa-clipboard-list"></i> حالة الطلب #{{ $demande->id }}
                     <span class="status-badge" style="background: {{ $demande->status === 'accepte' ? '#10B981' : ($demande->status === 'refuse' ? '#EF4444' : '#F59E0B') }}">
                         @if($demande->status === 'en_attente')
-                            قيد المعالجة
+                        في طور المعالجة
                         @elseif($demande->status === 'accepte')
                             مقبول
                         @else

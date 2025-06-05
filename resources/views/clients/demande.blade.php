@@ -592,7 +592,7 @@
 
                             <div class="floating-label-group">
                                 <input type="number" name="capacite" id="capacite" class="floating-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder=" " required min="1">
-                                <label for="capacite" class="floating-label required">السعة</label>
+                                <label for="capacite" class="floating-label required">اوحدة قياس السعة ب kg</label>
                                 <i class="fas fa-users absolute left-3 top-3 text-gray-400"></i>
                             </div>
 
@@ -730,7 +730,7 @@
                             <div class="floating-label-group">
                                 <select name="type_licence" id="type_licence" x-model="licenceType" class="custom-select floating-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                                 <option value="">-- اختر نوع الرخصة --</option>
-                                <option value="فردية">فردية</option>
+                                <option value="فردية">ذاتية</option>
                                 <option value="معنوية">معنوية</option>
                             </select>
                                 <label for="type_licence" class="floating-label required">نوع الرخصة</label>

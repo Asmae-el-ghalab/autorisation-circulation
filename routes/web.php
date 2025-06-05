@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/suivi', [DemandeController::class, 'trackDemande'])->name('demandes.track');
     Route::get('/demandes/search', [DemandeController::class, 'search'])->name('demandes.search');
     Route::get('/license/download/{license}', [DemandeController::class, 'downloadLicense'])->name('license.download');
+    Route::get('/license/verify/{id}', [DemandeController::class, 'verifyLicense'])->name('license.verify');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

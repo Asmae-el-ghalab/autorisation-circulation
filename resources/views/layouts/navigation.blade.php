@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام الرخصة</title>
+    <title>بلدية الرباط</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -73,12 +73,10 @@
                 <div class="flex items-center">
                     <!-- Logo -->
                     <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 space-x-reverse transition duration-300 transform hover:scale-105">
-                        <div class="flex items-center justify-center h-12 w-12 rounded-xl logo-gradient shadow-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <span class="text-xl font-bold text-blue-800 hidden md:inline">نظام الرخصة</span>
+                        <div class="w-12 h-12 text-blue-800">
+                             <x-application-logo class="w-full h-full" />
+                         </div>
+                        <span class="text-xl font-bold text-blue-800 hidden md:inline">بلدية الرباط</span>
                     </a>
 
                     <!-- Navigation Links -->

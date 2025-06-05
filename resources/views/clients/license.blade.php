@@ -242,7 +242,12 @@
                             <div class="mt-8 flex justify-center">
                                 <div class="text-center">
                                     <div class="w-32 h-32 mx-auto mb-2 bg-white p-2 rounded-lg shadow">
-                                        {!! QrCode::size(120)->generate(route('license.verify', $demande->id)) !!}
+                                        <img 
+                                            src="data:image/png;base64,{{ base64_encode(file_get_contents('https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' . urlencode(route('license.verify', $demande->id)))) }}" 
+                                            alt="QR Code" 
+                                            width="120" 
+                                            height="120"
+                                        />
                                     </div>
                                     <p class="text-sm text-gray-600">امسح الرمز للتحقق من صحة الرخصة</p>
                                 </div>

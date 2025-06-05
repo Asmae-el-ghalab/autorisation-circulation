@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('licenses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('demande_id')->constrained()->onDelete('cascade');
+            $table->string('file_path');
+            $table->enum('status', ['active', 'expired', 'revoked'])->default('active');
+            $table->timestamp('expires_at');
             $table->timestamps();
         });
     }

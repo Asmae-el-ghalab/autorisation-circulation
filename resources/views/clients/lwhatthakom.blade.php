@@ -59,7 +59,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-500">الطلبات الجديدة</p>
-                        <h3 class="text-2xl font-bold text-gray-800">{{ $demandes->where('status', 'nouveau')->count() }}</h3>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ $totalNouveau }}</h3>
                     </div>
                     <div class="bg-blue-100 p-3 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -74,7 +74,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-500">الطلبات المقبولة</p>
-                        <h3 class="text-2xl font-bold text-gray-800">{{ $demandes->where('status', 'accepte')->count() }}</h3>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ $totalAccepte }}</h3>
                     </div>
                     <div class="bg-green-100 p-3 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,7 +89,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-500">الطلبات المرفوضة</p>
-                        <h3 class="text-2xl font-bold text-gray-800">{{ $demandes->where('status', 'refuse')->count() }}</h3>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ $totalRefuse }}</h3>
                     </div>
                     <div class="bg-red-100 p-3 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -103,8 +103,8 @@
             <div class="bg-white rounded-lg shadow p-6 border-r-4 border-yellow-500">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-500">طلبات قيد الدراسة</p>
-                        <h3 class="text-2xl font-bold text-gray-800">{{ $demandes->where('status', 'en_attente')->count() }}</h3>
+                        <p class="text-gray-500">طلبات في طور المعالجة</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ $totalEnAttente }}</h3>
                     </div>
                     <div class="bg-yellow-100 p-3 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -118,7 +118,7 @@
         <!-- بحث سريع -->
         <div class="bg-white rounded-lg shadow p-6 mb-8">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">بحث سريع</h2>
-            <form action="{{ route('demandes.search') }}" method="GET">
+            <form action="{{ route('lwhatthakom') }}" method="GET">
             <div class="flex flex-col md:flex-row gap-4">
                 <div class="flex-1">
                         <input type="text" name="cin" placeholder="ابحث برقم CIN..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
@@ -210,25 +210,7 @@
                     عرض {{ $demandes->firstItem() ?? 0 }} إلى {{ $demandes->lastItem() ?? 0 }} من {{ $demandes->total() ?? 0 }} طلب
                 </div>
                 <div class="flex space-x-2 rtl:space-x-reverse">
-                    @if ($demandes->onFirstPage())
-                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-500 bg-gray-100 cursor-not-allowed">
-                            السابق
-                        </button>
-                    @else
-                        <a href="{{ $demandes->previousPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                            السابق
-                        </a>
-                    @endif
-
-                    @if ($demandes->hasMorePages())
-                        <a href="{{ $demandes->nextPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                            التالي
-                        </a>
-                    @else
-                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-500 bg-gray-100 cursor-not-allowed">
-                            التالي
-                        </button>
-                    @endif
+                    {{ $demandes->appends(request()->query())->links() }}
                 </div>
             </div>
     </div>

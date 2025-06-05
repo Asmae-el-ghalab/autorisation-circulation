@@ -7,6 +7,7 @@ use App\Models\Horaire;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\License;
+use PDF;
 
 class DemandeController extends Controller
 {
@@ -96,10 +97,23 @@ class DemandeController extends Controller
         return 'demandes/' . $fileName;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $demandes = Demande::with('user')->latest()->paginate(10);
-        return view('clients.lwhatthakom', compact('demandes'));
+        $query = Demande::with('user')->latest();
+
+        if ($request->has('cin')) {
+            $query->where('cin', 'like', '%' . $request->cin . '%');
+        }
+
+        $demandes = $query->paginate(10)->appends($request->only('cin'));
+
+        // Calculate total counts for each status
+        $totalNouveau = Demande::where('status', 'nouveau')->count();
+        $totalAccepte = Demande::where('status', 'accepte')->count();
+        $totalRefuse = Demande::where('status', 'refuse')->count();
+        $totalEnAttente = Demande::where('status', 'en_attente')->count();
+
+        return view('clients.lwhatthakom', compact('demandes', 'totalNouveau', 'totalAccepte', 'totalRefuse', 'totalEnAttente'));
     }
 
     public function show(Demande $demande)
@@ -162,19 +176,24 @@ class DemandeController extends Controller
     /**
      * Télécharger la licence
      */
-    public function downloadLicense(License $license)
+    public function downloadLicense($id)
     {
+        $demande = Demande::findOrFail($id);
+        
         // Vérifier si l'utilisateur a le droit d'accéder à cette licence
-        if (auth()->user()->id !== $license->user_id && !auth()->user()->isAdmin()) {
+        if (auth()->user()->id !== $demande->user_id && !auth()->user()->isAdmin()) {
             abort(403, 'Unauthorized action.');
         }
 
-        // Vérifier si le fichier existe
-        if (!Storage::exists('licenses/' . $license->file_path)) {
-            abort(404, 'License file not found.');
+        // Vérifier si le statut est accepté
+        if ($demande->status !== 'accepte') {
+            abort(404, 'License not found or not approved.');
         }
 
-        return Storage::download('licenses/' . $license->file_path, 'license.pdf');
+        // Générer le PDF de la licence
+        $pdf = PDF::loadView('clients.license-pdf', ['demande' => $demande]);
+        
+        return $pdf->download('license-' . $demande->id . '.pdf');
     }
 
     /**
@@ -188,8 +207,38 @@ class DemandeController extends Controller
 
         $demandes = Demande::where('cin', 'like', '%' . $request->cin . '%')
                           ->latest()
-                          ->paginate(10);
+                          ->paginate(10)
+                          ->appends($request->only('cin'));
 
         return view('clients.lwhatthakom', compact('demandes'));
+    }
+
+    /**
+     * Vérifier la validité d'une licence
+     */
+    public function verifyLicense($id)
+    {
+        $demande = Demande::findOrFail($id);
+        
+        if ($demande->status !== 'accepte') {
+            return response()->json([
+                'status' => 'invalid',
+                'message' => 'هذه الرخصة غير صالحة'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'valid',
+            'message' => 'هذه الرخصة صالحة',
+            'data' => [
+                'nom' => $demande->prenom . ' ' . $demande->nom,
+                'cin' => $demande->cin,
+                'type_vehicule' => $demande->type_vehicule,
+                'numero_immatriculation' => $demande->numero_immatriculation,
+                'point_depart' => $demande->point_depart,
+                'point_arrivee' => $demande->point_arrivee,
+                'date_expiration' => $demande->updated_at->addYear()->format('Y-m-d')
+            ]
+        ]);
     }
 }
