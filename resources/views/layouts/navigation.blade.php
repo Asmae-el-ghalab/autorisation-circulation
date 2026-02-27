@@ -76,7 +76,7 @@
                         <div class="w-12 h-12 text-blue-800">
                              <x-application-logo class="w-full h-full" />
                          </div>
-                        <span class="text-xl font-bold text-blue-800 hidden md:inline">بلدية الرباط</span>
+                        <span class="text-xl font-bold text-blue-800 hidden md:inline">جماعة الرباط</span>
                     </a>
 
                     <!-- Navigation Links -->

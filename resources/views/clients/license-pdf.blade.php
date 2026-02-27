@@ -6,6 +6,7 @@
     <title>الرخصة الإلكترونية</title>
     <style>
         body {
+                    direction: rtl;
             font-family: 'DejaVu Sans', sans-serif;
             background: #f8fafc;
             padding: 2rem;
